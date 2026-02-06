@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dir:*)",
+      "mcp__mcp-registry__search_mcp_registry",
+      "mcp__fetch__fetch",
+      "mcp__Airtable_MCP_Server__create_field",
+      "mcp__Airtable_MCP_Server__create_record",
+      "mcp__Airtable_MCP_Server__list_records",
+      "mcp__Airtable_MCP_Server__delete_records",
+      "mcp__Airtable_MCP_Server__describe_table",
+      "Bash(npm run build:*)",
+      "mcp__Airtable_MCP_Server__update_records"
+    ]
+  }
+}
