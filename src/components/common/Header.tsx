@@ -1,4 +1,4 @@
-import { GitCompare, Menu, ShoppingCart, Sparkles } from 'lucide-react'
+import { GitCompare, Menu, ShoppingCart, Search } from 'lucide-react'
 import { clsx } from 'clsx'
 import { motion } from 'framer-motion'
 import { useComparisonStore } from '../../stores/comparisonStore'
@@ -26,7 +26,7 @@ export function Header({ onCompareClick }: HeaderProps) {
                 whileTap={{ scale: 0.95 }}
                 className="w-10 h-10 bg-gradient-to-br from-electric-purple via-electric-pink to-electric-teal rounded-xl flex items-center justify-center shadow-lg shadow-purple-200/50"
               >
-                <Sparkles className="w-5 h-5 text-white" />
+                <Search className="w-5 h-5 text-white" />
               </motion.div>
               <div className="hidden sm:block">
                 <span className="font-display font-bold text-xl text-gradient">
