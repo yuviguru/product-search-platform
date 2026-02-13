@@ -3,7 +3,7 @@ import { ChevronDown, ChevronUp, Star, Sparkles, SlidersHorizontal } from 'lucid
 import { clsx } from 'clsx'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useFilterStore } from '../../stores/filterStore'
-import { categories, brands, priceRange as defaultPriceRange } from '../../data/products'
+import { priceRange as defaultPriceRange, formatCategoryName } from '../../data/products'
 import { FilterCounts } from '../../types/product'
 
 interface FilterPanelProps {
@@ -124,17 +124,19 @@ function FilterSection({ title, children, defaultOpen = true, badge }: FilterSec
 function CategoryFilter({ counts }: { counts: Record<string, number> }) {
   const { categories: selectedCategories, toggleCategory } = useFilterStore()
 
+  // Derive category list from filterCounts (dynamic from actual products)
+  const categoryEntries = Object.entries(counts).sort((a, b) => b[1] - a[1])
+
   return (
     <FilterSection title="Category" badge={selectedCategories.length}>
       <div className="space-y-1 max-h-48 overflow-y-auto custom-scrollbar">
-        {categories.map((category, index) => {
-          const count = counts[category.slug] || 0
-          const isSelected = selectedCategories.includes(category.slug)
+        {categoryEntries.map(([slug, count], index) => {
+          const isSelected = selectedCategories.includes(slug)
           const isDisabled = count === 0 && !isSelected
 
           return (
             <motion.label
-              key={category.slug}
+              key={slug}
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: index * 0.03 }}
@@ -149,7 +151,7 @@ function CategoryFilter({ counts }: { counts: Record<string, number> }) {
               <input
                 type="checkbox"
                 checked={isSelected}
-                onChange={() => !isDisabled && toggleCategory(category.slug)}
+                onChange={() => !isDisabled && toggleCategory(slug)}
                 disabled={isDisabled}
                 className="checkbox-vibrant"
               />
@@ -157,7 +159,7 @@ function CategoryFilter({ counts }: { counts: Record<string, number> }) {
                 'flex-1 text-sm font-medium',
                 isSelected ? 'text-electric-purple' : 'text-slate-700'
               )}>
-                {category.name}
+                {formatCategoryName(slug)}
               </span>
               <span className={clsx(
                 'text-xs px-2 py-0.5 rounded-full font-medium',
@@ -178,19 +180,20 @@ function BrandFilter({ counts }: { counts: Record<string, number> }) {
   const { brands: selectedBrands, toggleBrand } = useFilterStore()
   const [showAll, setShowAll] = useState(false)
 
-  const displayBrands = showAll ? brands : brands.slice(0, 6)
+  // Derive brand list from filterCounts (dynamic from actual products)
+  const brandEntries = Object.entries(counts).sort((a, b) => b[1] - a[1])
+  const displayBrands = showAll ? brandEntries : brandEntries.slice(0, 6)
 
   return (
     <FilterSection title="Brand" badge={selectedBrands.length}>
       <div className="space-y-1">
-        {displayBrands.map((brand, index) => {
-          const count = counts[brand.name] || 0
-          const isSelected = selectedBrands.includes(brand.name)
+        {displayBrands.map(([name, count], index) => {
+          const isSelected = selectedBrands.includes(name)
           const isDisabled = count === 0 && !isSelected
 
           return (
             <motion.label
-              key={brand.name}
+              key={name}
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: index * 0.03 }}
@@ -205,7 +208,7 @@ function BrandFilter({ counts }: { counts: Record<string, number> }) {
               <input
                 type="checkbox"
                 checked={isSelected}
-                onChange={() => !isDisabled && toggleBrand(brand.name)}
+                onChange={() => !isDisabled && toggleBrand(name)}
                 disabled={isDisabled}
                 className="checkbox-vibrant"
               />
@@ -213,7 +216,7 @@ function BrandFilter({ counts }: { counts: Record<string, number> }) {
                 'flex-1 text-sm font-medium',
                 isSelected ? 'text-electric-purple' : 'text-slate-700'
               )}>
-                {brand.name}
+                {name}
               </span>
               <span className={clsx(
                 'text-xs px-2 py-0.5 rounded-full font-medium',
@@ -227,7 +230,7 @@ function BrandFilter({ counts }: { counts: Record<string, number> }) {
         })}
       </div>
 
-      {brands.length > 6 && (
+      {brandEntries.length > 6 && (
         <motion.button
           onClick={() => setShowAll(!showAll)}
           whileHover={{ scale: 1.02 }}
@@ -235,7 +238,7 @@ function BrandFilter({ counts }: { counts: Record<string, number> }) {
           className="mt-3 text-sm text-electric-purple hover:text-electric-pink font-semibold flex items-center gap-1.5 transition-colors"
         >
           <Sparkles className="w-3.5 h-3.5" />
-          {showAll ? 'Show less' : `Show all (${brands.length})`}
+          {showAll ? 'Show less' : `Show all (${brandEntries.length})`}
         </motion.button>
       )}
     </FilterSection>

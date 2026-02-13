@@ -4,7 +4,6 @@ import { clsx } from 'clsx'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useFilterStore } from '../../stores/filterStore'
 import { useRecentSearches } from '../../hooks/useSearch'
-import { categories } from '../../data/products'
 import { Product } from '../../types/product'
 
 interface SearchBarProps {
@@ -90,8 +89,7 @@ export function SearchBar({ onSearch, products = [] }: SearchBarProps) {
     return uniqueCategories.map(cat => ({ name: cat, slug: cat.toLowerCase().replace(/\s+/g, '-') }))
   }, [products])
 
-  // Use product categories if available, otherwise fall back to static categories
-  const availableCategories = productCategories.length > 0 ? productCategories : categories
+  const availableCategories = productCategories
 
   // Generate suggestions
   const suggestions = inputValue.trim()
