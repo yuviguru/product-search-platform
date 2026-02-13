@@ -239,7 +239,7 @@ function App() {
       </AnimatePresence>
 
       {/* Compare Drawer */}
-      <CompareDrawer onCompare={() => setShowCompareModal(true)} />
+      <CompareDrawer onCompare={() => setShowCompareModal(true)} allProducts={allProducts} />
 
       {/* Compare Modal */}
       <AnimatePresence>
@@ -247,6 +247,7 @@ function App() {
           <CompareModal
             isOpen={showCompareModal}
             onClose={() => setShowCompareModal(false)}
+            allProducts={allProducts}
           />
         )}
       </AnimatePresence>

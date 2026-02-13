@@ -2,17 +2,18 @@ import { X, Star, Check, Minus, Trophy, Sparkles } from 'lucide-react'
 import { clsx } from 'clsx'
 import { motion } from 'framer-motion'
 import { useComparisonStore } from '../../stores/comparisonStore'
-import { getProductById, formatPrice, calculateDiscountedPrice } from '../../data/products'
+import { formatPrice, calculateDiscountedPrice } from '../../data/products'
 import { Product } from '../../types/product'
 
 interface CompareModalProps {
   isOpen: boolean
   onClose: () => void
+  allProducts: Product[]
 }
 
-export function CompareModal({ isOpen, onClose }: CompareModalProps) {
+export function CompareModal({ isOpen, onClose, allProducts }: CompareModalProps) {
   const { items, removeItem } = useComparisonStore()
-  const products = items.map(item => getProductById(item.productId)).filter(Boolean) as Product[]
+  const products = items.map(item => allProducts.find(p => p.id === item.productId)).filter(Boolean) as Product[]
 
   if (!isOpen || products.length < 2) {
     return null
