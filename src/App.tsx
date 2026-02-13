@@ -36,11 +36,11 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-mesh">
+    <div className="min-h-screen bg-mesh overflow-x-hidden">
       <Header onCompareClick={() => setShowCompareModal(true)} />
 
       {/* Hero Search Section */}
-      <div className="relative">
+      <div className="relative overflow-hidden">
         {/* Decorative gradient orbs */}
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-electric-purple/10 rounded-full blur-3xl" />
         <div className="absolute top-20 right-1/4 w-80 h-80 bg-electric-pink/10 rounded-full blur-3xl" />
