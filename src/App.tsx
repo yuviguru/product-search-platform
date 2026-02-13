@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { Filter, X, Share2, Check, Loader2, AlertCircle, RefreshCw, Sparkles } from 'lucide-react'
+import { Filter, X, Share2, Check, AlertCircle, RefreshCw, Sparkles, WifiOff, PackageOpen } from 'lucide-react'
 import { clsx } from 'clsx'
 
 import { Header } from './components/common/Header'
@@ -172,23 +172,88 @@ function App() {
               <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="flex flex-col items-center justify-center py-20 text-center"
+                className="flex flex-col items-center justify-center py-24 text-center"
               >
-                <div className="w-16 h-16 bg-red-100 rounded-2xl flex items-center justify-center mb-4">
-                  <AlertCircle className="w-8 h-8 text-red-500" />
-                </div>
-                <h3 className="text-xl font-display font-bold text-slate-900 mb-2">Failed to load products</h3>
-                <p className="text-slate-500 mb-6 max-w-md">
-                  {error?.message || 'An unexpected error occurred. Please try again.'}
+                <motion.div
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ type: "spring", stiffness: 200 }}
+                  className="relative mb-8"
+                >
+                  <div className="w-24 h-24 bg-gradient-to-br from-rose-100 to-orange-100 rounded-3xl flex items-center justify-center border border-rose-200/50">
+                    <WifiOff className="w-10 h-10 text-rose-500" />
+                  </div>
+                  <motion.div
+                    animate={{ rotate: [0, 10, -10, 0] }}
+                    transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                    className="absolute -top-2 -right-2 w-8 h-8 bg-gradient-to-r from-amber-400 to-orange-400 rounded-full flex items-center justify-center shadow-lg"
+                  >
+                    <AlertCircle className="w-4 h-4 text-white" />
+                  </motion.div>
+                </motion.div>
+
+                <h3 className="text-2xl font-display font-bold text-slate-900 mb-3">
+                  Oops! Connection hiccup
+                </h3>
+                <p className="text-slate-500 mb-2 max-w-md leading-relaxed">
+                  Our product shelves are temporarily unreachable. This is usually a brief network issue.
                 </p>
+                <p className="text-sm text-slate-400 mb-8 max-w-md">
+                  {error?.message || 'An unexpected error occurred.'}
+                </p>
+
                 <motion.button
                   onClick={() => refetch()}
-                  whileHover={{ scale: 1.02 }}
+                  whileHover={{ scale: 1.02, y: -2 }}
                   whileTap={{ scale: 0.98 }}
-                  className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-electric-purple to-electric-pink text-white font-semibold rounded-xl shadow-lg shadow-purple-200/50 hover:shadow-xl transition-shadow"
+                  className="flex items-center gap-2 px-8 py-3.5 bg-gradient-to-r from-electric-purple to-electric-pink text-white font-semibold rounded-xl shadow-lg shadow-purple-200/50 hover:shadow-xl transition-all duration-300"
                 >
                   <RefreshCw className="w-4 h-4" />
-                  Try Again
+                  Reconnect
+                </motion.button>
+              </motion.div>
+            ) : allProducts.length === 0 ? (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="flex flex-col items-center justify-center py-24 text-center"
+              >
+                <motion.div
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ type: "spring", stiffness: 200 }}
+                  className="relative mb-8"
+                >
+                  <div className="w-24 h-24 bg-gradient-to-br from-electric-purple/10 to-electric-pink/10 rounded-3xl flex items-center justify-center border border-electric-purple/20">
+                    <PackageOpen className="w-10 h-10 text-electric-purple" />
+                  </div>
+                  <motion.div
+                    animate={{
+                      scale: [1, 1.2, 1],
+                      opacity: [0.5, 1, 0.5],
+                    }}
+                    transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                    className="absolute -top-2 -right-2 w-8 h-8 bg-gradient-to-r from-electric-purple to-electric-pink rounded-full flex items-center justify-center shadow-lg"
+                  >
+                    <Sparkles className="w-4 h-4 text-white" />
+                  </motion.div>
+                </motion.div>
+
+                <h3 className="text-2xl font-display font-bold text-slate-900 mb-3">
+                  The shelves are empty... for now
+                </h3>
+                <p className="text-slate-500 mb-8 max-w-md leading-relaxed">
+                  No products are available at the moment. We're busy restocking with incredible finds. Check back soon!
+                </p>
+
+                <motion.button
+                  onClick={() => refetch()}
+                  whileHover={{ scale: 1.02, y: -2 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="flex items-center gap-2 px-8 py-3.5 bg-gradient-to-r from-electric-purple to-electric-pink text-white font-semibold rounded-xl shadow-lg shadow-purple-200/50 hover:shadow-xl transition-all duration-300"
+                >
+                  <RefreshCw className="w-4 h-4" />
+                  Check again
                 </motion.button>
               </motion.div>
             ) : products.length > 0 ? (
@@ -239,7 +304,7 @@ function App() {
       </AnimatePresence>
 
       {/* Compare Drawer */}
-      <CompareDrawer onCompare={() => setShowCompareModal(true)} />
+      <CompareDrawer onCompare={() => setShowCompareModal(true)} allProducts={allProducts} />
 
       {/* Compare Modal */}
       <AnimatePresence>
@@ -247,6 +312,7 @@ function App() {
           <CompareModal
             isOpen={showCompareModal}
             onClose={() => setShowCompareModal(false)}
+            allProducts={allProducts}
           />
         )}
       </AnimatePresence>

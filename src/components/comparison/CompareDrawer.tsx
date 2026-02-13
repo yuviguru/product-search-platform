@@ -3,17 +3,19 @@ import { X, ChevronUp, ChevronDown, GitCompare, Trash2, Sparkles } from 'lucide-
 import { clsx } from 'clsx'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useComparisonStore } from '../../stores/comparisonStore'
-import { getProductById, formatPrice, calculateDiscountedPrice } from '../../data/products'
+import { formatPrice, calculateDiscountedPrice } from '../../data/products'
+import { Product } from '../../types/product'
 
 interface CompareDrawerProps {
   onCompare: () => void
+  allProducts: Product[]
 }
 
-export function CompareDrawer({ onCompare }: CompareDrawerProps) {
+export function CompareDrawer({ onCompare, allProducts }: CompareDrawerProps) {
   const { items, removeItem, clearAll, maxItems } = useComparisonStore()
   const [isMinimized, setIsMinimized] = useState(false)
 
-  const products = items.map(item => getProductById(item.productId)).filter(Boolean)
+  const products = items.map(item => allProducts.find(p => p.id === item.productId)).filter(Boolean)
 
   if (items.length === 0) {
     return null

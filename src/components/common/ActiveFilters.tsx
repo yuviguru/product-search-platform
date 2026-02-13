@@ -1,7 +1,7 @@
 import { X } from 'lucide-react'
 import { clsx } from 'clsx'
 import { useFilterStore } from '../../stores/filterStore'
-import { categories, brands, priceRange as defaultPriceRange } from '../../data/products'
+import { priceRange as defaultPriceRange, formatCategoryName } from '../../data/products'
 
 export function ActiveFilters() {
   const {
@@ -23,9 +23,6 @@ export function ActiveFilters() {
 
   if (!hasActiveFilters()) return null
 
-  const getCategoryName = (slug: string) => 
-    categories.find(c => c.slug === slug)?.name || slug
-
   return (
     <div className="flex flex-wrap items-center gap-2">
       <span className="text-sm text-surface-500">Active filters:</span>
@@ -42,7 +39,7 @@ export function ActiveFilters() {
       {selectedCategories.map(cat => (
         <FilterChip
           key={cat}
-          label={getCategoryName(cat)}
+          label={formatCategoryName(cat)}
           onRemove={() => toggleCategory(cat)}
           color="blue"
         />
