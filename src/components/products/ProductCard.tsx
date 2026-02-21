@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Star, Heart, Check, Plus, ExternalLink, Sparkles, ImageOff } from 'lucide-react'
 import { clsx } from 'clsx'
+import { Link } from 'react-router-dom'
 import { Product } from '../../types/product'
 import { formatPrice, calculateDiscountedPrice } from '../../data/products'
 import { useComparisonStore } from '../../stores/comparisonStore'
@@ -69,7 +70,7 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
       )}
 
       {/* Image Container */}
-      <div className="relative aspect-square bg-gradient-to-br from-slate-50 to-slate-100 overflow-hidden">
+      <Link to={`/product/${product.id}`} className="relative aspect-square bg-gradient-to-br from-slate-50 to-slate-100 overflow-hidden block">
         {imageError ? (
           <div className="w-full h-full flex flex-col items-center justify-center bg-slate-100 text-slate-400">
             <ImageOff className="w-12 h-12 mb-2" />
@@ -156,7 +157,7 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
             </>
           )}
         </motion.button>
-      </div>
+      </Link>
 
       {/* Content */}
       <div className="relative p-5 flex flex-col flex-grow">
@@ -172,9 +173,11 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
         </div>
 
         {/* Title */}
-        <h3 className="font-display font-semibold text-slate-900 mb-3 line-clamp-2 group-hover:text-electric-purple transition-colors duration-300">
-          {product.title}
-        </h3>
+        <Link to={`/product/${product.id}`} className="block">
+          <h3 className="font-display font-semibold text-slate-900 mb-3 line-clamp-2 group-hover:text-electric-purple transition-colors duration-300">
+            {product.title}
+          </h3>
+        </Link>
 
         {/* Rating */}
         <div className="flex items-center gap-2 mb-3">
@@ -206,6 +209,27 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
                 {tag}
               </span>
             ))}
+          </div>
+        )}
+
+        {/* Feature Badges */}
+        {(product.aiValueScore || (product.youtubeReviewIds && product.youtubeReviewIds.length > 0)) && (
+          <div className="flex items-center gap-2 mb-3">
+            {product.aiValueScore && (
+              <span className={clsx(
+                'inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-xs font-semibold',
+                product.aiValueScore >= 8 ? 'bg-emerald-50 text-emerald-700' :
+                product.aiValueScore >= 6 ? 'bg-amber-50 text-amber-700' : 'bg-red-50 text-red-700'
+              )}>
+                <Sparkles className="w-3 h-3" />
+                AI: {product.aiValueScore}/10
+              </span>
+            )}
+            {product.youtubeReviewIds && product.youtubeReviewIds.length > 0 && (
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-red-50 text-red-600 rounded-md text-xs font-semibold">
+                ▶ {product.youtubeReviewIds.length} review{product.youtubeReviewIds.length > 1 ? 's' : ''}
+              </span>
+            )}
           </div>
         )}
 
