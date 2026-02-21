@@ -15,6 +15,17 @@ export interface Product {
   tags?: string[]
   // Amazon Associate affiliate link
   affiliateUrl?: string
+  // YouTube review video IDs
+  youtubeReviewIds?: string[]
+  // AI Insights
+  aiSummary?: string
+  aiPros?: string[]
+  aiCons?: string[]
+  aiValueScore?: number
+  aiBestFor?: string
+  aiVerdict?: string
+  // Manual alternative product IDs
+  alternativeIds?: number[]
 }
 
 export interface ProductSpecs {
@@ -72,3 +83,20 @@ export interface ComparisonItem {
   productId: number
   addedAt: number
 }
+
+export interface NewsArticle {
+  id: string
+  title: string
+  slug: string
+  summary: string
+  content: string
+  coverImage: string
+  category: NewsCategory
+  relatedProductIds: number[]
+  tags: string[]
+  publishedAt: string
+  author: string
+  featured: boolean
+}
+
+export type NewsCategory = 'Product Launch' | 'Review Roundup' | 'Deal Alert' | 'Industry News' | 'All'
