@@ -56,7 +56,7 @@ interface AirtableResponse {
   offset?: string
 }
 
-function transformRecord(record: AirtableRecord, index: number): Product {
+export function transformRecord(record: AirtableRecord, index: number): Product {
   const fields = record.fields
 
   // Parse specs from JSON string
@@ -153,7 +153,7 @@ export async function fetchProducts(): Promise<Product[]> {
   return allRecords.map((record, index) => transformRecord(record, index))
 }
 
-function transformNewsRecord(record: AirtableNewsRecord): NewsArticle {
+export function transformNewsRecord(record: AirtableNewsRecord): NewsArticle {
   const fields = record.fields
 
   const relatedProductIds = fields.relatedProductIds
